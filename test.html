@@ -1,0 +1,173 @@
+<!--////////////////////////////////////////////////////////////////////////////////////////
+///                                                                                      ///
+///  Example Using Three.js Library, HTML, CSS & JavaScript                              ///
+//   3D Interactive Web Apps & Games   2021-2024                                         ///
+///  Contact Shane Brumback https://www.shanebrumback.com                                ///
+///  Send a message if you have questions about this code                                ///
+///  I am a freelance developer. I develop any and all web.                              ///
+///  Apps Websites 3D 2D CMS Systems etc. Contact me anytime :)                          ///
+///                                                                                      ///
+////////////////////////////////////////////////////////////////////////////////////////////-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threejs Examples - Camera Tracking Stationary Point During Random Position Changes</title>
+    <style>
+        body {
+            color: white;
+            text-align: center;
+            margin: 0;
+            background-color: black
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        h1 {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="http://www.shanebrumback.com/threejs-examples/camera-tracking-stationary-object.html">
+        <h1>Three.js Examples - Camera Tracking Stationary Object</h1>
+    </a>
+
+    <!--Load the latest version of Three.js from CDN-->
+    <script src="https://cdn.jsdelivr.net/npm/three@latest/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@latest/examples/js/controls/OrbitControls.js"></script>
+
+    <script type="module">
+
+
+
+        // Create the scene
+        var scene = new THREE.Scene();
+
+        // Create the camera
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+        camera.position.y = 5;
+
+        // Create the renderer
+        var renderer = new THREE.WebGLRenderer({ alpha: true, depth: true });
+        // Configure renderer settings
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.toneMapping = THREE.ReinhardToneMapping;
+        renderer.setClearColor(0x000000, 0); // Set background color to black
+        renderer.domElement.style.position = 'fixed';
+        renderer.domElement.id = 'renderer';
+        renderer.domElement.style.zIndex = '-1';
+        renderer.domElement.style.left = '0';
+        renderer.domElement.style.top = '0';
+        document.body.appendChild(renderer.domElement);
+
+        // Add camera controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.dampingFactor = 0.1; // Reduce camera damping for smoother movement
+        controls.autoRotate = true; // Make the camera rotate sinuously around the spheres
+
+        // Create the ambient light
+        var ambientLight = new THREE.AmbientLight(0xffffff, 0.15);
+        // Add the ambient light to the scene
+        scene.add(ambientLight);
+
+        // Create the grid
+        var gridSize = 10;
+        var gridStep = 1;
+        var gridHelper = new THREE.GridHelper(gridSize, gridSize, 0xffffff, 0xffffff);
+        gridHelper.position.set(0, 0, 0);
+        scene.add(gridHelper);
+
+        // Create the sphere geometry
+        var sphereGeometry = new THREE.SphereGeometry(.75, 32, 32);
+
+        // Create the sphere material
+        var sphereMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+
+        // Enable lighting on the sphere material
+        sphereMaterial.flatShading = false;
+        sphereMaterial.side = THREE.DoubleSide;
+        sphereMaterial.shininess = 100; // Set the shininess value (adjust as desired)
+
+
+        // Create the sphere mesh
+        var sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        // Position the sphere at the center of the scene
+        sphereMesh.position.set(0, 0, 0);
+
+        // Add the sphere to the scene
+        scene.add(sphereMesh);
+
+        // Create a directional light
+        var light = new THREE.DirectionalLight(0xffffff, 1);
+
+        // Set the light position
+        light.position.set(1, 1, 1);
+
+        // Add the light to the scene
+        scene.add(light);
+
+        // Function to handle window resizing
+        window.addEventListener('resize', onWindowResize, false);
+
+        // Function to handle window resizing
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Camera movement variables
+        var targetPosition = new THREE.Vector3();
+        var cameraSpeed = 0.01;
+        var minHeight = 3;
+
+        // Randomly move the camera within the plane area
+        function moveCamera() {
+            if (
+                camera.position.x <= -gridSize / 2 + gridStep / 2 ||
+                camera.position.x >= gridSize / 2 - gridStep / 2 ||
+                camera.position.z <= -gridSize / 2 + gridStep / 2 ||
+                camera.position.z >= gridSize / 2 - gridStep / 2
+            ) {
+                // Reverse the direction of the camera's velocity
+                targetPosition.multiplyScalar(-1);
+            }
+
+            if (camera.position.distanceTo(targetPosition) <= 0.1) {
+                targetPosition.x = Math.random() * (gridSize - gridStep) - gridSize / 2 + gridStep / 2;
+                targetPosition.z = Math.random() * (gridSize - gridStep) - gridSize / 2 + gridStep / 2;
+            }
+
+            targetPosition.y = minHeight;
+
+            var direction = targetPosition.clone().sub(camera.position).normalize();
+            var velocity = direction.multiplyScalar(cameraSpeed);
+
+            camera.position.add(velocity);
+            camera.lookAt(scene.position);
+        }
+
+        // Render loop
+        function animate() {
+            requestAnimationFrame(animate);
+            moveCamera();
+            renderer.render(scene, camera);
+        }
+
+        // Start the animation
+        animate();
+
+
+
+    </script>
+</body>
+</html>
