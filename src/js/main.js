@@ -5,6 +5,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import CustomSky from './classes/Sky.js';
 import CustomSea from './classes/Sea.js';
 import MovingBox from './classes/Box.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 
 let container, stats, controls;
 let camera, scene, renderer;
@@ -25,22 +27,31 @@ function init() {
     container.appendChild(renderer.domElement);
 
     scene = new THREE.Scene();
+    movingBox = new MovingBox(scene);
 
     // Set up the camera
-    camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 20000);
-    camera.position.set(30, 30, 100);
+    camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 20000);
+    camera.position.set(0, 700, 800); // رفع الكاميرا إلى 500 على المحور Y
 
-    // Instantiate the custom components
+    // Add lights to the scene
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Soft white light
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(100, 100, 100).normalize();
+    scene.add(directionalLight);
+
+    // Instantiate the custom components 
     customSky = new CustomSky(scene, renderer);
     customSea = new CustomSea(scene, new THREE.Vector3(1, 0, 0)); // Adjust sun direction as needed
-    movingBox = new MovingBox(scene);
+
 
     // Set up orbit controls
     controls = new OrbitControls(camera, renderer.domElement);
-    controls.maxPolarAngle = Math.PI * 0.495;
-    controls.target.set(0, 10, 0);
+    controls.maxPolarAngle = Math.PI * 0.75; // ضبط الزاوية القطبية القصوى للسماح برؤية أفضل
+    controls.target.set(0, 10, 0); // الهدف لا يزال عند مستوى الأرض
     controls.minDistance = 40.0;
-    controls.maxDistance = 200.0;
+    controls.maxDistance = 20000.0; // زيادة المسافة القصوى للرؤية
 
     // Set up the stats monitor
     stats = new Stats();
@@ -78,7 +89,20 @@ function animate() {
     movingBox.update(); // Update box movement
     customSea.update(); // Update sea animations
     customSky.updateSun(); // Update sky if necessary
-    
+
+    // Calculate the new camera position relative to the ship
+    if (movingBox.ship) {
+        const shipPosition = movingBox.ship.position.clone();
+        const offset = new THREE.Vector3(0, 50, -2000); // Adjust the offset as needed
+
+        // Calculate the new camera position
+        // const cameraPosition = shipPosition.clone().add(offset);
+
+        // Set the camera position and make it look at the ship
+        // camera.position.lerp(cameraPosition, 0.1);
+        camera.lookAt(shipPosition);
+    }
+
     controls.update();
     renderer.render(scene, camera);
     stats.update();
