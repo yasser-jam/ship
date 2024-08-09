@@ -123,6 +123,7 @@ function updateCameraPosition() {
 
 function animate() {
 
+    // reduce frames
     setTimeout(() => {
         requestAnimationFrame(animate);
 

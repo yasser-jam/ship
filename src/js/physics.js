@@ -1,4 +1,4 @@
-import { abs } from "mathjs";
+import { setSpeed, setTime } from "./stat";
 
 // SCENE TIME
 let startSceneTime = Date.now();
@@ -12,6 +12,9 @@ const getVelocity = (acceleration, initialVelocity = 0) => {
 
   // Calculate the final velocity using the kinematic equation
   const velocity = initialVelocity + acceleration * sceneTime;
+
+  // update state
+  setTime(sceneTime)
 
   // Return the final velocity
   return velocity;
@@ -90,6 +93,9 @@ export const getShipSpeed = (cycles) => {
 
   // get the final speed (velocity)
   const speed = getVelocity(acc, 0);
+
+  // upate stat
+  setSpeed(speed)
 
   return speed;
 };
