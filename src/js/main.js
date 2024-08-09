@@ -39,7 +39,8 @@ function init() {
 
     // Set up the camera
     camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 20000);
-    camera.position.set(0, 700, 800); // رفع الكاميرا إلى 500 على المحور Y
+    // camera.position.set(0, 700, 800); // رفع الكاميرا إلى 500 على المحور Y
+    camera.position.set(0, 20, 40); // رفع الكاميرا إلى 500 على المحور Y
 
     // Add lights to the scene
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Soft white light
@@ -73,7 +74,7 @@ function init() {
     folderSky.open();
 
     const folderBox = gui.addFolder('Box Motion');
-    folderBox.add(movingBox, 'engineCycles', 0, 100).onChange(() => movingBox.updateSpeed());
+    folderBox.add(movingBox, 'engineCycles', 0, 100).onChange((value) => movingBox.update(value));
     folderBox.open();
 
     const waterUniforms = customSea.water.material.uniforms;
@@ -121,10 +122,16 @@ function updateCameraPosition() {
 }
 
 function animate() {
-    requestAnimationFrame(animate);
+
+    setTimeout(() => {
+        requestAnimationFrame(animate);
+
+    }, 1000)
+
+    
 
     movingBox.update(); // Update box movement
-    customSea.update(); // Update sea animations
+    // customSea.update(); // Update sea animations
     customSky.updateSun(); // Update sky if necessary
 
     updateCameraPosition();
