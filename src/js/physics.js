@@ -3,6 +3,9 @@ import { setSpeed, setTime } from "./stat";
 // SCENE TIME
 let startSceneTime = Date.now();
 
+// SHIP WEIGHT
+const shipWeight = 10000 
+
 // BASIC CALCULATIONS
 
 // Calculate Velocity
@@ -70,7 +73,7 @@ export const getEnginSpeed = (cycles) => {
   const engForce = getEngineForce(cycles);
 
   // get the engine accelaration
-  const engineAcc = getAcceleration(engForce.force, 10000);
+  const engineAcc = getAcceleration(engForce.force, shipWeight);
 
   // get the engine speed (velocity)
   const engSpeed = getVelocity(engineAcc, 0);
@@ -89,7 +92,7 @@ export const getShipSpeed = (cycles) => {
   const collectiveVector = collectVectors(engForce, resForce);
 
   // get the collective accelaration
-  const acc = getAcceleration(collectiveVector.force, 10);
+  const acc = getAcceleration(collectiveVector.force, shipWeight);
 
   // get the final speed (velocity)
   const speed = getVelocity(acc, 0);
@@ -97,7 +100,10 @@ export const getShipSpeed = (cycles) => {
   // upate stat
   setSpeed(speed)
 
-  return speed;
+  return {
+    speed,
+    angle: collectiveVector.angle
+  };
 };
 
 export const collectVectors = (vec1, vec2, angle) => {
