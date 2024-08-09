@@ -39,8 +39,8 @@ class MovingBox {
 
         this.moveForward = false;
         this.moveBackward = false;
-        this.moveLeft = false;
-        this.moveRight = false;
+        this.rotateLeft = false;
+        this.rotateRight = false;
 
         this.addEventListeners();
     }
@@ -57,11 +57,11 @@ class MovingBox {
             if (this.moveBackward) {
                 this.ship.position.z += this.speed;
             }
-            if (this.moveLeft) {
-                this.ship.position.x -= this.speed;
+            if (this.rotateLeft) {
+                this.ship.rotation.y += 0.5; // Adjust rotation speed if needed
             }
-            if (this.moveRight) {
-                this.ship.position.x += this.speed;
+            if (this.rotateRight) {
+                this.ship.rotation.y -= 0.5; // Adjust rotation speed if needed
             }
         }
     }
@@ -75,10 +75,10 @@ class MovingBox {
                 this.moveBackward = true;
             }
             if (event.code === 'KeyA') {
-                this.moveLeft = true;
+                this.rotateLeft = true;
             }
             if (event.code === 'KeyD') {
-                this.moveRight = true;
+                this.rotateRight = true;
             }
         });
 
@@ -90,10 +90,10 @@ class MovingBox {
                 this.moveBackward = false;
             }
             if (event.code === 'KeyA') {
-                this.moveLeft = false;
+                this.rotateLeft = false;
             }
             if (event.code === 'KeyD') {
-                this.moveRight = false;
+                this.rotateRight = false;
             }
         });
     }
