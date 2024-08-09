@@ -12,6 +12,14 @@ let container, stats, controls;
 let camera, scene, renderer;
 let customSky, customSea, movingBox;
 
+// متغيرات لتخزين حالة المفاتيح المضغوطة
+const keys = {
+    ArrowUp: false,
+    ArrowDown: false,
+    ArrowLeft: false,
+    ArrowRight: false
+};
+
 init();
 animate();
 
@@ -45,7 +53,7 @@ function init() {
     customSky = new CustomSky(scene, renderer);
     customSea = new CustomSea(scene, new THREE.Vector3(1, 0, 0)); // Adjust sun direction as needed
 
-
+   
     // Set up orbit controls
     controls = new OrbitControls(camera, renderer.domElement);
     controls.maxPolarAngle = Math.PI * 0.75; // ضبط الزاوية القطبية القصوى للسماح برؤية أفضل
@@ -75,6 +83,10 @@ function init() {
     folderWater.open();
 
     window.addEventListener('resize', onWindowResize, false);
+
+    // إضافة مستمعين لأحداث الضغط والإفلات عن المفاتيح
+    window.addEventListener('keydown', onKeyDown, false);
+    window.addEventListener('keyup', onKeyUp, false);
 }
 
 function onWindowResize() {
@@ -83,12 +95,39 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+function onKeyDown(event) {
+    keys[event.key] = true;
+}
+
+function onKeyUp(event) {
+    keys[event.key] = false;
+}
+
+function updateCameraPosition() {
+    const moveSpeed = 100; // سرعة الحركة
+
+    if (keys.ArrowUp) {
+        camera.position.z -= moveSpeed;
+    }
+    if (keys.ArrowDown) {
+        camera.position.z += moveSpeed;
+    }
+    if (keys.ArrowLeft) {
+        camera.position.x -= moveSpeed;
+    }
+    if (keys.ArrowRight) {
+        camera.position.x += moveSpeed;
+    }
+}
+
 function animate() {
     requestAnimationFrame(animate);
-    
+
     movingBox.update(); // Update box movement
     customSea.update(); // Update sea animations
     customSky.updateSun(); // Update sky if necessary
+
+    updateCameraPosition();
 
     // Calculate the new camera position relative to the ship
     if (movingBox.ship) {

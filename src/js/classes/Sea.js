@@ -6,7 +6,7 @@ class CustomSea {
         this.scene = scene;
 
         // تكبير رقعة البحر
-        const waterGeometry = new THREE.PlaneGeometry(100000, 100000);
+        const waterGeometry = new THREE.PlaneGeometry(10000000, 10000000);
 
         this.water = new Water(waterGeometry, {
             textureWidth: 512,
