@@ -73,7 +73,7 @@ function init() {
     folderSky.open();
 
     const folderBox = gui.addFolder('Box Motion');
-    folderBox.add(movingBox, 'engineCycles', 0, 100).onChange(() => movingBox.updateSpeed());
+    folderBox.add(movingBox, 'engineCycles', 0, 100).onChange((value) => movingBox.update(value));
     folderBox.open();
 
     const waterUniforms = customSea.water.material.uniforms;
@@ -121,7 +121,14 @@ function updateCameraPosition() {
 }
 
 function animate() {
-    requestAnimationFrame(animate);
+
+    // reduce frames
+    setTimeout(() => {
+        requestAnimationFrame(animate);
+
+    }, 10)
+
+    
 
     movingBox.update(); // Update box movement
     customSea.update(); // Update sea animations

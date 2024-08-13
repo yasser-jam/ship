@@ -92,8 +92,9 @@ class MovingBox {
                 this.ship.position.z -= directionZ * this.speed;
             }
             if (this.moveBackward) {
-                this.ship.position.x += directionX * this.speed;
-                this.ship.position.z += directionZ * this.speed;
+                this.ship.translateX(this.speed) ;
+                // this.ship.position.x += directionX * this.speed;
+                // this.ship.position.z += directionZ * this.speed;
             }
 
             if (this.rotateLeft) {
