@@ -10,7 +10,7 @@ class MovingBox {
         this.mtlLoader = new MTLLoader();
 
         this.mtlLoader.load('src/textures/EverGiven/EverGiven.mtl', (materials) => {
-            materials.preload();
+            materials.preload();  
             this.loader.setMaterials(materials);
 
             this.loader.load('src/textures/EverGiven/EverGiven.obj', (object) => {
@@ -42,7 +42,7 @@ class MovingBox {
         this.rotateLeft = false;
         this.rotateRight = false;
 
-        this.rotationSpeed = 0.005; // سرعة الدوران
+        this.rotationSpeed = 0.05; // سرعة الدوران
         this.angle = 0; // زاوية السفينة
 
         this.addEventListeners();
@@ -54,14 +54,34 @@ class MovingBox {
 
     update() {
         if (this.ship) {
-            if (this.rotateLeft) {
-                this.angle += this.rotationSpeed;
-                this.ship.rotation.y += this.rotationSpeed;
+            // حساب القوة الناتجة من المحرك
+            const engineForce = getEngineForce(this.engineCycles);
+            function getEngineForce(engineCycles) {
+                // اكتب المنطق الذي يحدد القوة الناتجة بناءً على عدد دورات المحرك
+                return {
+                    force: engineCycles * 10, // كمثال بسيط، القوة قد تعتمد بشكل خطي على عدد دورات المحرك
+                    dist: 0 // افتراض أن الاتجاه للأمام (0 درجات)
+                };
             }
-            if (this.rotateRight) {
-                this.angle -= this.rotationSpeed;
-                this.ship.rotation.y -= this.rotationSpeed;
-            }
+            
+            // حساب القوة الناتجة عن مقاومة الماء (بافتراض أن المقاومة تعمل بزاوية 180 درجة مقابل الاتجاه)
+            const resistanceForce = {
+                force: 1, // قوة المقاومة (يمكن تعديلها حسب الحاجة)
+                dist: 180 // زاوية المقاومة (عكس اتجاه الحركة)
+            };
+
+            // دمج القوى الناتجة من المحرك والمقاومة للحصول على القوة النهائية المؤثرة على السفينة
+            const netForce = collectVectors(engineForce, resistanceForce ); // مثال على تمرير زاوية صفرية
+
+
+            // حساب التسارع بناءً على القوة النهائية وكتلة السفينة
+            const acceleration = getAcceleration(netForce.force, 10); // نفترض أن كتلة السفينة هي 10
+
+            // حساب السرعة النهائية بناءً على التسارع
+            const velocity = getVelocity(acceleration, 1, this.speed);
+
+            // تحديث السرعة الحالية بالسفينة
+            this.speed = velocity;
 
             // حساب الاتجاه الجديد بناءً على زاوية الدوران
             const directionX = Math.sin(this.angle);
@@ -74,6 +94,15 @@ class MovingBox {
             if (this.moveBackward) {
                 this.ship.position.x += directionX * this.speed;
                 this.ship.position.z += directionZ * this.speed;
+            }
+
+            if (this.rotateLeft) {
+                this.angle += this.rotationSpeed;
+                this.ship.rotation.y += this.rotationSpeed;
+            }
+            if (this.rotateRight) {
+                this.angle -= this.rotationSpeed;
+                this.ship.rotation.y -= this.rotationSpeed;
             }
         }
     }

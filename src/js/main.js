@@ -39,7 +39,7 @@ function init() {
 
     // Set up the camera
     camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 20000);
-    camera.position.set(0, 700, 800); // رفع الكاميرا إلى 500 على المحور Y
+    camera.position.set(0, 700, 800); // رفع الكاميرا إلى 700 على المحور Y
 
     // Add lights to the scene
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Soft white light
@@ -53,7 +53,7 @@ function init() {
     customSky = new CustomSky(scene, renderer);
     customSea = new CustomSea(scene, new THREE.Vector3(1, 0, 0)); // Adjust sun direction as needed
 
-   
+
     // Set up orbit controls
     controls = new OrbitControls(camera, renderer.domElement);
     controls.maxPolarAngle = Math.PI * 0.75; // ضبط الزاوية القطبية القصوى للسماح برؤية أفضل
@@ -132,8 +132,9 @@ function animate() {
     // Calculate the new camera position relative to the ship
     if (movingBox.ship) {
         const shipPosition = movingBox.ship.position.clone();
-        const offset = new THREE.Vector3(0, 50, -2000); // Adjust the offset as needed
+        const offset = new THREE.Vector3(0, 500, -1500); // تعديل الموقع النسبي للكاميرا
 
+        camera.position.copy(shipPosition).add(offset); // ضبط موضع الكاميرا بناءً على موقع السفينة
         camera.lookAt(shipPosition);
     }
 
