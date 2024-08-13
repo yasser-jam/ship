@@ -34,46 +34,46 @@ class MovingBox {
             });
         });
 
-    this.engineCycles = 1; // Default number of engine cycles
-    // this.speed = getSpeed(this.engineCycles); // Set initial speed based on engine cycles
-    this.speed = getShipSpeed(this.engineCycles); // Set initial speed based on engine cycles
+        this.engineCycles = 1; // Default number of engine cycles
+        this.speed = getSpeed(this.engineCycles); // Set initial speed based on engine cycles
 
         this.moveForward = false;
         this.moveBackward = false;
-        this.moveLeft = false;
-        this.moveRight = false;
+        this.rotateLeft = false;
+        this.rotateRight = false;
 
-    this.addEventListeners();
-  }
+        this.rotationSpeed = 0.005; // سرعة الدوران
+        this.angle = 0; // زاوية السفينة
 
-  updateSpeed() {
-    this.speed = getSpeed(this.engineCycles);
-    return this.speed;
-  }
-
-  update() {
-    if (this.box.position.z > -1000) {
-        // this.box.position.z -= this.updateSpeed();
-        this.box.position.z -= this.updateSpeed();
+        this.addEventListeners();
     }
-    if (this.moveBackward) {
-      this.box.position.z += this.updateSpeed();
+
+    updateSpeed() {
+        this.speed = getSpeed(this.engineCycles);
     }
-  }
 
     update() {
         if (this.ship) {
+            if (this.rotateLeft) {
+                this.angle += this.rotationSpeed;
+                this.ship.rotation.y += this.rotationSpeed;
+            }
+            if (this.rotateRight) {
+                this.angle -= this.rotationSpeed;
+                this.ship.rotation.y -= this.rotationSpeed;
+            }
+
+            // حساب الاتجاه الجديد بناءً على زاوية الدوران
+            const directionX = Math.sin(this.angle);
+            const directionZ = Math.cos(this.angle);
+
             if (this.moveForward) {
-                this.ship.position.z -= this.speed;
+                this.ship.position.x -= directionX * this.speed;
+                this.ship.position.z -= directionZ * this.speed;
             }
             if (this.moveBackward) {
-                this.ship.position.z += this.speed;
-            }
-            if (this.moveLeft) {
-                this.ship.position.x -= this.speed;
-            }
-            if (this.moveRight) {
-                this.ship.position.x += this.speed;
+                this.ship.position.x += directionX * this.speed;
+                this.ship.position.z += directionZ * this.speed;
             }
         }
     }
@@ -87,10 +87,10 @@ class MovingBox {
                 this.moveBackward = true;
             }
             if (event.code === 'KeyA') {
-                this.moveLeft = true;
+                this.rotateLeft = true;
             }
             if (event.code === 'KeyD') {
-                this.moveRight = true;
+                this.rotateRight = true;
             }
         });
 
@@ -102,10 +102,10 @@ class MovingBox {
                 this.moveBackward = false;
             }
             if (event.code === 'KeyA') {
-                this.moveLeft = false;
+                this.rotateLeft = false;
             }
             if (event.code === 'KeyD') {
-                this.moveRight = false;
+                this.rotateRight = false;
             }
         });
     }

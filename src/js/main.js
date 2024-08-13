@@ -59,7 +59,7 @@ function init() {
     controls.maxPolarAngle = Math.PI * 0.75; // ضبط الزاوية القطبية القصوى للسماح برؤية أفضل
     controls.target.set(0, 10, 0); // الهدف لا يزال عند مستوى الأرض
     controls.minDistance = 40.0;
-    controls.maxDistance = 20000.0; // زيادة المسافة القصوى للرؤية
+    controls.maxDistance = 2000000.0; // زيادة المسافة القصوى للرؤية
 
     // Set up the stats monitor
     stats = new Stats();
@@ -134,13 +134,14 @@ function animate() {
         const shipPosition = movingBox.ship.position.clone();
         const offset = new THREE.Vector3(0, 50, -2000); // Adjust the offset as needed
 
-        // Calculate the new camera position
-        // const cameraPosition = shipPosition.clone().add(offset);
-
-        // Set the camera position and make it look at the ship
-        // camera.position.lerp(cameraPosition, 0.1);
         camera.lookAt(shipPosition);
     }
+
+    controls.update();
+    renderer.render(scene, camera);
+    stats.update();
+
+
 
     controls.update();
     renderer.render(scene, camera);
