@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { getSpeed } from './../physics.js';
+import { getShipSpeed } from './../physics.js';
 
 class MovingBox {
     constructor(scene) {
@@ -35,7 +35,7 @@ class MovingBox {
         });
 
         this.engineCycles = 1; // Default number of engine cycles
-        this.speed = getSpeed(this.engineCycles); // Set initial speed based on engine cycles
+        this.speed = getShipSpeed(this.engineCycles); // Set initial speed based on engine cycles
 
         this.moveForward = false;
         this.moveBackward = false;
