@@ -73,7 +73,7 @@ function init() {
     folderSky.add(customSky.parameters, 'azimuth', -180, 180, 0.1).onChange(() => customSky.updateSun());
 
     const folderBox = gui.addFolder('Box Motion');
-    folderBox.add(movingBox, 'engineCycles', 0, 1000).onChange((value) => {
+    folderBox.add(movingBox, 'engineCycles', 1, 1000).onChange((value) => {
         movingBox.engineCycles = value
     });
     folderBox.add(movingBox, 'direction', ['forward', 'backward']).onChange((value) => {
@@ -129,7 +129,7 @@ function animate() {
     // reduce frames
     setTimeout(() => {
         requestAnimationFrame(animate);
-    }, 100)
+    }, 1000)
 
     
     movingBox.update(movingBox.engineCycles); // Update box movement

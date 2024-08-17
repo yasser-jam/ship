@@ -1,18 +1,18 @@
-import { setSpeed, setTime } from "./stat";
+import { setAccc, setSpeed, setTime } from "./stat";
 
 // SCENE TIME
 let startSceneTime = Date.now();
 
 // SHIP WEIGHT
 // const shipWeight = 10000
-const shipWeight = 187000000 
+const shipWeight = 187000000
 
 // BASIC CALCULATIONS
 
 // Calculate Velocity
 const getVelocity = (acceleration, initialVelocity = 0, time) => {
   // get time
-  let sceneTime = time ? time : (Date.now() - startSceneTime) / 100;
+  let sceneTime = time ? time : (Date.now() - startSceneTime) / 1000;
 
   // Calculate the final velocity using the kinematic equation
   const velocity = initialVelocity + acceleration * sceneTime;
@@ -92,6 +92,9 @@ export const getEnginSpeed = (cycles) => {
   return engSpeed
 };
 
+// initial speed
+let initialSpeed = 0
+
 export const getShipSpeed = (cycles) => {
   // get engine force
   const engForce = getEngineForce(cycles)
@@ -108,8 +111,11 @@ export const getShipSpeed = (cycles) => {
   // get the collective accelaration
   const acc = getAcceleration(collectiveVector.force, shipWeight);
 
+  // update acceleration in stat
+  setAccc(acc)
   // get the final speed (velocity)
-  const speed = getVelocity(acc, 0);
+  initialSpeed = getVelocity(acc, initialSpeed)
+  const speed = getVelocity(acc, initialSpeed);
 
   // upate stat
   setSpeed(speed)
