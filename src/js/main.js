@@ -8,10 +8,14 @@ import MovingBox from './classes/Box.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import Rock from './classes/Rock.js';
+import { RoomEnvironment } from 'three/examples/jsm/Addons.js';
 
 let container, stats, controls;
 let camera, scene, renderer;
 let customSky, customSea, movingBox , rock;
+
+//new saad
+let shipBoxHelper;
 
 // متغيرات لتخزين حالة المفاتيح المضغوطة
 const keys = {
@@ -93,6 +97,12 @@ function init() {
     // إضافة مستمعين لأحداث الضغط والإفلات عن المفاتيح
     window.addEventListener('keydown', onKeyDown, false);
     window.addEventListener('keyup', onKeyUp, false);
+
+
+    //new saad 
+
+    shipBoxHelper = new THREE.BoxHelper(movingBox.ship, 0xff0000); // Red color for the ship
+    scene.add(shipBoxHelper);
 }
 
 function onWindowResize() {
@@ -150,10 +160,38 @@ function animate() {
 
         // Set the camera position and make it look at the ship
         // camera.position.lerp(cameraPosition, 0.1);
-        camera.lookAt(shipPosition);
+        camera.lookAt(rock.rock.position.clone());
+
+        const  shipCollisionDetectionBox = new THREE.Box3().setFromObject(movingBox.ship) ;
+        const  rockCollisionDetectionBox = new THREE.Box3().setFromCenterAndSize(
+            rock.rock.position , 
+            new THREE.Vector3(3000, 3000, 3000)//need better numbers 
+        );
+        
+        shipBoxHelper.update() ;
+
+        // var distance = distanceVector(movingBox.ship.position , rock.rock.position) ;
+
+        if(shipCollisionDetectionBox.intersectsBox(rockCollisionDetectionBox)){
+            //speed needs to be 0 buy the function
+            //speed after collision // just add more weight to the rock untell it became 0
+            console.log("collision");
+            movingBox.weight += 1.6 ;
+            console.log(movingBox.weight) ;
+        }
+
     }
 
     controls.update();
     renderer.render(scene, camera);
     stats.update();
+}
+
+function distanceVector( v1, v2 )
+{
+    var dx = v1.x - v2.x;
+    var dy = v1.y - v2.y;
+    var dz = v1.z - v2.z;
+
+    return Math.sqrt( dx * dx + dy * dy + dz * dz );
 }

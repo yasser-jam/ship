@@ -7,6 +7,24 @@ let startSceneTime = Date.now();
 // const shipWeight = 10000
 const shipWeight = 187000000 
 
+//new saad
+const gravityAcceleration = 9.8 ;
+const rho = 1027 ;
+
+export const weightForce = (weight) => {
+  return weight * gravityAcceleration ;
+};
+
+export const buoyantForce = (objectVolume) => {
+  return rho * objectVolume * gravityAcceleration ;
+};
+
+export const getSpeedAfterCollision = (shipSpeed , shipWeight , rockWeight) => {
+  //"v' = vm / (m + M)"
+  return (shipSpeed * shipWeight) / (rockWeight + shipWeight);
+};
+
+
 // BASIC CALCULATIONS
 
 // Calculate Velocity

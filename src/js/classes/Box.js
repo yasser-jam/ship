@@ -3,6 +3,11 @@ import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { getShipSpeed } from './../physics.js';
 
+
+//new saad
+import { weightForce } from './../physics.js';
+import { buoyantForce } from './../physics.js';
+
 class MovingBox {
   constructor(scene) {
     this.scene = scene;
@@ -38,7 +43,7 @@ class MovingBox {
         box.getSize(size);
 
         // Adjust the position to start at z = 0 and extend along the z-axis
-        this.ship.position.set(0, 0, -1000);
+        this.ship.position.set(0, 0, -2000);
 
         this.scene.add(this.ship);
 
@@ -63,13 +68,21 @@ class MovingBox {
     this.moveLeft = false;
     this.moveRight = false;
 
-    this.addEventListeners()
+    this.weight = 187500 ;
+    this.volume = 182.570593962999 ;
+
+
+    this.addEventListeners();
   }
 
 
   update(cycles = this.engineCycles) {
     // update engine cycles
     this.engineCycles = cycles;
+
+    var yPos =  buoyantForce(this.volume) - weightForce(this.weight) ;
+    console.log(yPos) ;
+    this.ship.position.y = yPos ;
 
     // update box movement on z axis
     const updateMove = getShipSpeed(this.engineCycles);
@@ -95,6 +108,8 @@ class MovingBox {
         this.moveRight = true;
       }
     });
+
+    //new saad
 
     document.addEventListener('keyup', (event) => {
       if (event.code === 'KeyA') {
