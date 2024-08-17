@@ -10,47 +10,47 @@ class MovingBox {
     this.mtlLoader = new MTLLoader();
 
     // BOX
-    // const geometry = new THREE.BoxGeometry(200, 200, 200);
-    // const material = new THREE.MeshStandardMaterial({ roughness: 0 });
-    // this.ship = new THREE.Mesh(geometry, material);
-    // this.ship.castShadow = true;
-    // this.ship.receiveShadow = true;
-    // this.scene.add(this.ship);
+    const geometry = new THREE.BoxGeometry(200, 200, 200);
+    const material = new THREE.MeshStandardMaterial({ roughness: 0 });
+    this.ship = new THREE.Mesh(geometry, material);
+    this.ship.castShadow = true;
+    this.ship.receiveShadow = true;
+    this.scene.add(this.ship);
 
 
     // SHIP
-    this.mtlLoader.load('src/textures/EverGiven/EverGiven.mtl', (materials) => {
-      materials.preload();
-      this.loader.setMaterials(materials);
+    // this.mtlLoader.load('src/textures/EverGiven/EverGiven.mtl', (materials) => {
+    //   materials.preload();
+    //   this.loader.setMaterials(materials);
 
-      this.loader.load('src/textures/EverGiven/EverGiven.obj', (object) => {
-        this.ship = object;
-        this.ship.scale.set(10, 10, 10); // Adjust the scale if needed
-        this.ship.castShadow = true;
-        this.ship.receiveShadow = true;
+    //   this.loader.load('src/textures/EverGiven/EverGiven.obj', (object) => {
+    //     this.ship = object;
+    //     this.ship.scale.set(10, 10, 10); // Adjust the scale if needed
+    //     this.ship.castShadow = true;
+    //     this.ship.receiveShadow = true;
 
-        // Rotate the model by 90 degrees around the Y axis
-        this.ship.rotation.y = 3 * Math.PI / 2;
+    //     // Rotate the model by 90 degrees around the Y axis
+    //     this.ship.rotation.y = 3 * Math.PI / 2;
 
-        // Compute bounding box to determine the size of the model
-        const box = new THREE.Box3().setFromObject(this.ship);
-        const size = new THREE.Vector3();
-        box.getSize(size);
+    //     // Compute bounding box to determine the size of the model
+    //     const box = new THREE.Box3().setFromObject(this.ship);
+    //     const size = new THREE.Vector3();
+    //     box.getSize(size);
 
-        // Adjust the position to start at z = 0 and extend along the z-axis
-        this.ship.position.set(0, 0, -2000);
+    //     // Adjust the position to start at z = 0 and extend along the z-axis
+    //     this.ship.position.set(0, 0, -2000);
 
-        this.scene.add(this.ship);
+    //     this.scene.add(this.ship);
 
-        // ADD LIGHT TO THE SHIP
-        const shipLight = new THREE.PointLight(0xffffff, 1, 500);
-        shipLight.position.set(0, 50, 0); // Adjust position relative to the ship
-        shipLight.castShadow = true;
+    //     // ADD LIGHT TO THE SHIP
+    //     const shipLight = new THREE.PointLight(0xffffff, 1, 500);
+    //     shipLight.position.set(0, 50, 0); // Adjust position relative to the ship
+    //     shipLight.castShadow = true;
 
-        // Add the light to the ship, so it moves with the ship
-        this.ship.add(shipLight);
-      });
-    });
+    //     // Add the light to the ship, so it moves with the ship
+    //     this.ship.add(shipLight);
+    //   });
+    // });
 
     // Default number of engine cycles
     this.engineCycles = 1;
