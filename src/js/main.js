@@ -129,11 +129,11 @@ function animate() {
     // reduce frames
     setTimeout(() => {
         requestAnimationFrame(animate);
-    }, 1000)
+    }, 1)
 
     
     movingBox.update(movingBox.engineCycles); // Update box movement
-    // customSea.update(); // Update sea animations
+    customSea.update(); // Update sea animations
     customSky.updateSun(); // Update sky if necessary
 
     updateCameraPosition();
