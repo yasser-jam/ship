@@ -9,15 +9,6 @@ class MovingBox {
     this.loader = new OBJLoader();
     this.mtlLoader = new MTLLoader();
 
-    // BOX
-    // const geometry = new THREE.BoxGeometry(200, 200, 200);
-    // const material = new THREE.MeshStandardMaterial({ roughness: 0 });
-    // this.ship = new THREE.Mesh(geometry, material);
-    // this.ship.castShadow = true;
-    // this.ship.receiveShadow = true;
-    // this.scene.add(this.ship);
-
-
     // SHIP
     this.mtlLoader.load('src/textures/EverGiven/EverGiven.mtl', (materials) => {
       materials.preload();
@@ -63,7 +54,10 @@ class MovingBox {
     this.moveLeft = false;
     this.moveRight = false;
 
-    this.addEventListeners()
+    // Load horn sound
+    this.hornSound = new Audio('src/sounds/horn.mp3');
+
+    this.addEventListeners();
   }
 
   update(cycles = this.engineCycles) {
@@ -77,7 +71,6 @@ class MovingBox {
 
     if (this.angle == 180) {
       this.ship.translateX(this.speed / 0.1);
-      // this.ship.position.z += this.speed;
     } else {
       this.ship.position.z -= this.speed;
     }
@@ -92,6 +85,10 @@ class MovingBox {
       if (event.code === 'KeyD') {
         console.log('moving right');
         this.moveRight = true;
+      }
+      if (event.code === 'KeyH') {
+        console.log('Horn sound');
+        this.hornSound.play();
       }
     });
 

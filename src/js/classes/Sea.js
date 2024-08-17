@@ -23,6 +23,11 @@ class CustomSea {
 
         this.water.rotation.x = -Math.PI / 2;
         this.scene.add(this.water);
+
+        // Load and play wave sound continuously
+        this.waveSound = new Audio('src/sounds/waves.mp3');
+        this.waveSound.loop = true; // Loop the sound
+        this.waveSound.play();
     }
 
     update() {
