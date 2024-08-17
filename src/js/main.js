@@ -129,7 +129,7 @@ function animate() {
     // reduce frames
     setTimeout(() => {
         requestAnimationFrame(animate);
-    }, 1)
+    }, 100)
 
     
     movingBox.update(movingBox.engineCycles); // Update box movement

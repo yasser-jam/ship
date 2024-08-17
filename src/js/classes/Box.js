@@ -60,6 +60,7 @@ class MovingBox {
     this.addEventListeners();
   }
 
+
   update(cycles = this.engineCycles) {
     // update engine cycles
     this.engineCycles = cycles;
@@ -72,18 +73,18 @@ class MovingBox {
     if (this.angle == 180) {
       this.ship.translateX(this.speed / 0.1);
     } else {
-      this.ship.position.z -= this.speed;
+      this.ship.translateX(-this.speed / 0.1);
     }
   }
 
   addEventListeners() {
     document.addEventListener('keydown', (event) => {
       if (event.code === 'KeyA') {
-        console.log('moving left');
+        this.rotate(this.angle++)
         this.moveLeft = true;
       }
       if (event.code === 'KeyD') {
-        console.log('moving right');
+        this.rotate(this.angle--)
         this.moveRight = true;
       }
       if (event.code === 'KeyH') {
@@ -100,6 +101,13 @@ class MovingBox {
         this.moveRight = false;
       }
     });
+  }
+
+
+  rotate(angle) {
+    setTimeout(() => {
+      this.ship.rotateY(angle)
+      }, 10)
   }
 }
 
