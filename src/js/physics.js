@@ -29,10 +29,46 @@ const getAcceleration = (force, weight) => {
   return force / weight;
 };
 
+export const collectVectors = (vec1, vec2) => {
+  // Convert angles from degrees to radians
+  const angle1Rad = (vec1.angle * Math.PI) / 180;
+  const angle2Rad = (vec2.angle * Math.PI) / 180;
+
+  // Calculate the x and y components of each vector
+  const vec1X = vec1.force * Math.cos(angle1Rad);
+  const vec1Y = vec1.force * Math.sin(angle1Rad);
+
+  const vec2X = vec2.force * Math.cos(angle2Rad);
+  const vec2Y = vec2.force * Math.sin(angle2Rad);
+
+  // Sum the x and y components to get the resultant vector components
+  const totalX = vec1X + vec2X;
+  const totalY = vec1Y + vec2Y;
+
+  // Calculate the magnitude of the resultant vector
+  const targetForce = Math.sqrt(totalX * totalX + totalY * totalY);
+
+  // Calculate the angle of the resultant vector (in radians)
+  let targetAngleRad = Math.atan2(totalY, totalX);
+
+  // Convert the angle back to degrees
+  let targetAngle = (targetAngleRad * 180) / Math.PI;
+
+  // Normalize the angle to the range [0, 360)
+  if (targetAngle < 0) {
+    targetAngle += 360;
+  }
+
+  return {
+    force: targetForce,
+    angle: targetAngle,
+  };
+};
+
 // EOF Basics
 
 // Define the function to calculate thrust force
-const getEngineForce = (cycles) => {
+const getEngineForce = (cycles, angle) => {
   const rho = 1027; // Density of seawater in kg/m^3
 
   const D = 10
@@ -40,8 +76,8 @@ const getEngineForce = (cycles) => {
 
   const vw = 10.3 // water speed
 
-  // always engine force angle 0 (always forward)
-  const vecAngle = 0;
+  // get the angle from box
+  const vecAngle = angle;
 
   // Calculate the thrust force using the derived formula
   // Todo: check laws
@@ -81,7 +117,7 @@ const getResForce = (cycles) => {
 
 export const getEnginSpeed = (cycles) => {
   // get the engine force
-  const engForce = getEngineForce(cycles);
+  const engForce = getEngineForce(cycles, 0);
 
   // get the engine accelaration
   const engineAcc = getAcceleration(engForce.force, shipWeight);
@@ -95,19 +131,21 @@ export const getEnginSpeed = (cycles) => {
 // initial speed
 let initialSpeed = 0
 
-export const getShipSpeed = (cycles) => {
+// cycles: number of cycles in second for the engine (engine speed)
+// angle: the angle of the ship
+export const getShipSpeed = (cycles, angle) => {
   // get engine force
-  const engForce = getEngineForce(cycles)
+  const engForce = getEngineForce(cycles, angle)
 
   // get the drag force (resistance force)
   const resForce = getResForce(cycles);
 
-  console.log('Eng Force', engForce);
-  console.log('Res Forc', resForce);
+  // console.log('Eng Force', engForce);
+  // console.log('Res Forc', resForce);
 
   // get the collective vector (engine and resistence)
   const collectiveVector = collectVectors(engForce, resForce);
-
+  console.log(collectiveVector);
   // get the collective accelaration
   const acc = getAcceleration(collectiveVector.force, shipWeight);
 
@@ -126,35 +164,18 @@ export const getShipSpeed = (cycles) => {
   };
 };
 
-export const collectVectors = (vec1, vec2, angle) => {
-  let targetAngle;
-  let targetForce;
+// Get time to rotate to certain angle
+export const getRotationTime = (angle) => {
+  const r = angle // نصف قطر الدوران
+  const s = 10^6 // عزم الدوران
+  const m = shipWeight
 
-  // on the same handle (check if the two vectors are on same handle)
-  let onSameDirection = Math.abs(vec1.angle - vec2.angle) == 0 || Math.abs(vec1.angle - vec2.angle) == 360;
-  let onOppositeDirection = Math.abs(vec1.angle - vec2.angle) == 180;
 
-  const vectorsHandle = vec1.angle - vec2.angle;
+  const I = 1/2 * m * r * r // عزم القصور الذاتي
 
-  if (onSameDirection) {
-    targetAngle = vec1.angle;
-    targetForce = vec1.force + vec2.force;
-  } else  {
-    const biggerVec = vec1.force > vec2.force ? vec1 : vec2;
+  const w = I / s // السرعة الزاوية
 
-    targetAngle = biggerVec.angle;
-    targetForce = Math.abs(vec1.force - vec2.force);
-  }
+  const t = w * Math.PI / 180
 
-  return {
-    force: targetForce,
-    angle: targetAngle,
-  };
-};
-
-// Force Powers are:
-// - Engine (get Engine Force)
-export const collectForce = () => {};
-
-// - Water Resistence
-export const collectRes = () => {};
+  return t
+}

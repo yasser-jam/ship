@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { getShipSpeed } from './../physics.js';
+import { getRotationTime, getShipSpeed } from './../physics.js';
 
 class MovingBox {
   constructor(scene) {
@@ -54,10 +54,11 @@ class MovingBox {
 
     // Default number of engine cycles
     this.engineCycles = 1;
+    this.angle = 0
+    this.radius = 1000 // نصف قطر الدوران
 
-    const moveConfig = getShipSpeed(this.engineCycles); // Set initial speed based on engine cycles
+    const moveConfig = getShipSpeed(this.engineCycles, this.angle); // Set initial speed based on engine cycles
     this.speed = moveConfig.speed;
-    this.angle = moveConfig.angle;
 
     // Movement keys
     this.moveLeft = false;
@@ -72,7 +73,7 @@ class MovingBox {
     this.engineCycles = cycles;
 
     // update box movement on z axis
-    const updateMove = getShipSpeed(this.engineCycles);
+    const updateMove = getShipSpeed(this.engineCycles, this.angle);
     this.speed = updateMove.speed;
     this.angle = updateMove.angle;
 
@@ -84,14 +85,25 @@ class MovingBox {
     }
   }
 
+  // Apply rotate on UI
+  rotate(dir) {
+    if (dir == 'right') {
+      this.angle += 1 / getRotationTime(this.radius)
+      this.ship.rotateY(this.angle)
+    } else if (dir == 'left') {
+      this.angle -= 1 / getRotationTime(this.radius)
+      this.ship.rotateY(this.angle)
+    }
+  }
+
   addEventListeners() {
     document.addEventListener('keydown', (event) => {
       if (event.code === 'KeyA') {
-        this.rotate(this.angle++)
+        this.rotate('right')
         this.moveLeft = true;
       }
       if (event.code === 'KeyD') {
-        this.rotate(this.angle--)
+        this.rotate('left')
         this.moveRight = true;
       }
     });
@@ -104,13 +116,6 @@ class MovingBox {
         this.moveRight = false;
       }
     });
-  }
-
-
-  rotate(angle) {
-    setTimeout(() => {
-      this.ship.rotateY(angle)
-      }, 10)
   }
 }
 
