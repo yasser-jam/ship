@@ -77,10 +77,10 @@ class MovingBox {
     this.angle = updateMove.angle;
 
     if (this.angle == 180) {
-      this.ship.translateX(this.speed / 0.1);
+      this.ship.translateZ(this.speed / 0.1);
       // this.ship.position.z += this.speed;
     } else {
-      this.ship.translateX(-this.speed / 0.1);
+      this.ship.translateZ(-this.speed / 0.1);
     }
   }
 
