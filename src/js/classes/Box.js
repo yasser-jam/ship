@@ -9,6 +9,7 @@ class MovingBox {
     this.loader = new OBJLoader();
     this.mtlLoader = new MTLLoader();
 
+
     // BOX
     const geometry = new THREE.BoxGeometry(200, 200, 200);
     const material = new THREE.MeshStandardMaterial({ roughness: 0 });
@@ -16,7 +17,6 @@ class MovingBox {
     this.ship.castShadow = true;
     this.ship.receiveShadow = true;
     this.scene.add(this.ship);
-
 
     // SHIP
     // this.mtlLoader.load('src/textures/EverGiven/EverGiven.mtl', (materials) => {
@@ -54,8 +54,13 @@ class MovingBox {
 
     // Default number of engine cycles
     this.engineCycles = 1;
-    this.angle = 0
-    this.radius = 1000 // نصف قطر الدوران
+    this.angle = 0;
+    this.radius = 1000; // نصف قطر الدوران
+    
+    // Sway
+    this.swayLevel = 0;
+    this.swayLeft = true
+    this.swayRight = false
 
     const moveConfig = getShipSpeed(this.engineCycles, this.angle); // Set initial speed based on engine cycles
     this.speed = moveConfig.speed;
@@ -64,9 +69,8 @@ class MovingBox {
     this.moveLeft = false;
     this.moveRight = false;
 
-    this.addEventListeners()
+    this.addEventListeners();
   }
-
 
   update(cycles = this.engineCycles) {
     // update engine cycles
@@ -83,27 +87,32 @@ class MovingBox {
     } else {
       this.ship.translateZ(-this.speed / 0.1);
     }
+
+  }
+
+  sway() {
+    let level = 0.1
   }
 
   // Apply rotate on UI
   rotate(dir) {
     if (dir == 'right') {
-      this.angle += 1 / getRotationTime(this.radius)
-      this.ship.rotateY(this.angle)
+      this.angle += 1 / getRotationTime(this.radius);
+      this.ship.rotateY(this.angle);
     } else if (dir == 'left') {
-      this.angle -= 1 / getRotationTime(this.radius)
-      this.ship.rotateY(this.angle)
+      this.angle -= 1 / getRotationTime(this.radius);
+      this.ship.rotateY(this.angle);
     }
   }
 
   addEventListeners() {
     document.addEventListener('keydown', (event) => {
       if (event.code === 'KeyA') {
-        this.rotate('right')
+        this.rotate('right');
         this.moveLeft = true;
       }
       if (event.code === 'KeyD') {
-        this.rotate('left')
+        this.rotate('left');
         this.moveRight = true;
       }
     });

@@ -36,7 +36,6 @@ function init() {
 
     scene = new THREE.Scene();
     movingBox = new MovingBox(scene);
-
     // Set up the camera
     camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 20000);
     camera.position.set(0, 700, 1100); // رفع الكاميرا إلى 500 على المحور Y

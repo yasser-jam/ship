@@ -128,6 +128,10 @@ export const getEnginSpeed = (cycles) => {
   return engSpeed
 };
 
+export const shutDown = (speed) => {
+  
+}
+
 // initial speed
 let initialSpeed = 0
 
