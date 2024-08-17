@@ -38,7 +38,7 @@ class MovingBox {
         box.getSize(size);
 
         // Adjust the position to start at z = 0 and extend along the z-axis
-        this.ship.position.set(0, 0, -2000);
+        this.ship.position.set(0, 0, -1000);
 
         this.scene.add(this.ship);
 

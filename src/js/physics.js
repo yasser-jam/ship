@@ -99,8 +99,8 @@ export const getShipSpeed = (cycles) => {
   // get the drag force (resistance force)
   const resForce = getResForce(cycles);
 
-  console.log('Eng Force', engForce);
-  console.log('Res Forc', resForce);
+  // console.log('Eng Force', engForce);
+  // console.log('Res Forc', resForce);
 
   // get the collective vector (engine and resistence)
   const collectiveVector = collectVectors(engForce, resForce);

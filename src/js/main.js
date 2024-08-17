@@ -7,10 +7,11 @@ import CustomSea from './classes/Sea.js';
 import MovingBox from './classes/Box.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+import Rock from './classes/Rock.js';
 
 let container, stats, controls;
 let camera, scene, renderer;
-let customSky, customSea, movingBox;
+let customSky, customSea, movingBox , rock;
 
 // متغيرات لتخزين حالة المفاتيح المضغوطة
 const keys = {
@@ -36,6 +37,7 @@ function init() {
 
     scene = new THREE.Scene();
     movingBox = new MovingBox(scene);
+    rock = new Rock(scene);
 
     // Set up the camera
     camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 20000);
