@@ -10,12 +10,13 @@ class MovingBox {
     this.mtlLoader = new MTLLoader();
 
     // BOX
-    const geometry = new THREE.BoxGeometry(20, 20, 20);
+    const geometry = new THREE.BoxGeometry(200, 200, 200);
     const material = new THREE.MeshStandardMaterial({ roughness: 0 });
     this.ship = new THREE.Mesh(geometry, material);
     this.ship.castShadow = true;
     this.ship.receiveShadow = true;
     this.scene.add(this.ship);
+
 
     // SHIP
     // this.mtlLoader.load('src/textures/EverGiven/EverGiven.mtl', (materials) => {
@@ -51,26 +52,21 @@ class MovingBox {
     //   });
     // });
 
-    this.engineCycles = 1; // Default number of engine cycles
-    const move = getShipSpeed(this.engineCycles); // Set initial speed based on engine cycles
+    // Default number of engine cycles
+    this.engineCycles = 1;
 
-    this.speed = move.speed;
-    this.angle = move.angle;
+    const moveConfig = getShipSpeed(this.engineCycles); // Set initial speed based on engine cycles
+    this.speed = moveConfig.speed;
+    this.angle = moveConfig.angle;
 
-    this.moveForward = true;
-    this.moveBackward = false;
+    // Movement keys
     this.moveLeft = false;
     this.moveRight = false;
 
-    this.addEventListeners();
+    this.addEventListeners()
   }
 
-  updateSpeed() {
-    return this.speed;
-  }
-
-  update(cycles = 1) {
-    console.log(cycles);
+  update(cycles = this.engineCycles) {
     // update engine cycles
     this.engineCycles = cycles;
 
@@ -80,7 +76,8 @@ class MovingBox {
     this.angle = updateMove.angle;
 
     if (this.angle == 180) {
-      this.ship.position.z += this.speed;
+      this.ship.translateX(this.speed / 0.1);
+      // this.ship.position.z += this.speed;
     } else {
       this.ship.position.z -= this.speed;
     }
@@ -88,27 +85,17 @@ class MovingBox {
 
   addEventListeners() {
     document.addEventListener('keydown', (event) => {
-      if (event.code === 'KeyW') {
-        this.moveForward = true;
-      }
-      if (event.code === 'KeyS') {
-        this.moveBackward = true;
-      }
       if (event.code === 'KeyA') {
+        console.log('moving left');
         this.moveLeft = true;
       }
       if (event.code === 'KeyD') {
+        console.log('moving right');
         this.moveRight = true;
       }
     });
 
     document.addEventListener('keyup', (event) => {
-      if (event.code === 'KeyW') {
-        this.moveForward = false;
-      }
-      if (event.code === 'KeyS') {
-        this.moveBackward = false;
-      }
       if (event.code === 'KeyA') {
         this.moveLeft = false;
       }

@@ -39,7 +39,7 @@ function init() {
 
     // Set up the camera
     camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 20000);
-    camera.position.set(0, 700, 800); // رفع الكاميرا إلى 500 على المحور Y
+    camera.position.set(0, 700, 1100); // رفع الكاميرا إلى 500 على المحور Y
     // camera.position.set(0, 20, 40); // رفع الكاميرا إلى 500 على المحور Y
 
     // Add lights to the scene
@@ -71,19 +71,20 @@ function init() {
     const folderSky = gui.addFolder('Sky');
     folderSky.add(customSky.parameters, 'elevation', 0, 90, 0.1).onChange(() => customSky.updateSun());
     folderSky.add(customSky.parameters, 'azimuth', -180, 180, 0.1).onChange(() => customSky.updateSun());
-    folderSky.open();
 
     const folderBox = gui.addFolder('Box Motion');
-    folderBox.add(movingBox, 'engineCycles', 0, 100).onChange((value) => {
+    folderBox.add(movingBox, 'engineCycles', 0, 1000).onChange((value) => {
         movingBox.engineCycles = value
     });
-    folderBox.open();
+    folderBox.add(movingBox, 'direction', ['forward', 'backward']).onChange((value) => {
+        // movingBox.changeDirection()
+    });
 
-    const waterUniforms = customSea.water.material.uniforms;
-    const folderWater = gui.addFolder('Water Effects');
-    folderWater.add(waterUniforms.distortionScale, 'value', 0, 8, 0.1).name('Distortion Scale');
-    folderWater.add(waterUniforms.size, 'value', 0.1, 10, 0.1).name('Wave Size');
-    folderWater.open();
+    // const waterUniforms = customSea.water.material.uniforms;
+    // const folderWater = gui.addFolder('Water Effects');
+    // folderWater.add(waterUniforms.distortionScale, 'value', 0, 8, 0.1).name('Distortion Scale');
+    // folderWater.add(waterUniforms.size, 'value', 0.1, 10, 0.1).name('Wave Size');
+    // folderWater.open();
 
     window.addEventListener('resize', onWindowResize, false);
 
@@ -143,7 +144,7 @@ function animate() {
         const offset = new THREE.Vector3(0, 50, -2000); // Adjust the offset as needed
 
         // Calculate the new camera position
-        // const cameraPosition = shipPosition.clone().add(offset);
+        const cameraPosition = shipPosition.clone().add(offset);
 
         // Set the camera position and make it look at the ship
         // camera.position.lerp(cameraPosition, 0.1);

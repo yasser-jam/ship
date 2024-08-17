@@ -4,14 +4,15 @@ import { setSpeed, setTime } from "./stat";
 let startSceneTime = Date.now();
 
 // SHIP WEIGHT
-const shipWeight = 10000 
+// const shipWeight = 10000
+const shipWeight = 187000000 
 
 // BASIC CALCULATIONS
 
 // Calculate Velocity
-const getVelocity = (acceleration, initialVelocity = 0) => {
+const getVelocity = (acceleration, initialVelocity = 0, time) => {
   // get time
-  let sceneTime = (Date.now() - startSceneTime) / 1000;
+  let sceneTime = time ? time : (Date.now() - startSceneTime) / 100;
 
   // Calculate the final velocity using the kinematic equation
   const velocity = initialVelocity + acceleration * sceneTime;
@@ -28,12 +29,11 @@ const getAcceleration = (force, weight) => {
   return force / weight;
 };
 
+// EOF Basics
+
 // Define the function to calculate thrust force
 const getEngineForce = (cycles) => {
-  const mu = 0.5; // Efficiency coefficient
   const rho = 1027; // Density of seawater in kg/m^3
-  const A = 23.635 ; // Reference area in m^2
-  const k = 0.1; // Proportionality constant (example value)
 
   const D = 10
   const pitch = 0.2
@@ -46,7 +46,7 @@ const getEngineForce = (cycles) => {
   // Calculate the thrust force using the derived formula
   // Todo: check laws
   // const vecForce = mu * k * cycles * Math.sqrt(2 * rho * A);
-  const vecForce = mu * D * D * cycles * pitch * pitch;
+  const vecForce = rho * D * D * pitch * pitch * cycles;
   // const vecForce = rho * A * vw * vw
 
   // Return the thrust force
@@ -61,13 +61,16 @@ const getResForce = (cycles) => {
   const rho = 1025; // Density of seawater in kg/m^3
   const A = 23.635; // Reference Area Todo: should be calculated // const calculated by  h = v / l* w
   const Cd = 0.6; // Drag Coefficient
-  const v = getEnginSpeed(cycles); // velocity of the object relative to the fluid
+
+  const v = getEnginSpeed(cycles)
 
   // always engine force angle 0 (always backward)
   const resAngle = 180;
 
   // Calculate the thrust force using the derived formula
+  // Todo: check law
   const resForce = 0.5 * rho * (v * v) * Cd * A;
+  // const resForce = 0.5 * rho * (v) * Cd * A;
 
   // Return the thrust force
   return {
@@ -80,12 +83,11 @@ export const getEnginSpeed = (cycles) => {
   // get the engine force
   const engForce = getEngineForce(cycles);
 
-  console.log('Engine Force: ', engForce);
   // get the engine accelaration
   const engineAcc = getAcceleration(engForce.force, shipWeight);
 
-  // get the engine speed (velocity)
-  const engSpeed = getVelocity(engineAcc, 0);
+  // get the engine speed (velocity) in the initial time
+  const engSpeed = getVelocity(engineAcc, 0, 1);
 
   return engSpeed
 };
@@ -97,6 +99,7 @@ export const getShipSpeed = (cycles) => {
   // get the drag force (resistance force)
   const resForce = getResForce(cycles);
 
+  console.log('Eng Force', engForce);
   console.log('Res Forc', resForce);
 
   // get the collective vector (engine and resistence)
