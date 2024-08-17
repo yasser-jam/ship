@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starter Page</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-image: url('/src/images/base.png');
+        }
+
+        .controls {
+            position: fixed;
+            top: 3%;
+            left: 4%;
+            width: 90%;
+            height: 90%;
+            background-color: rgba(255, 255, 255, .8);
+            padding: 1rem;
+            border-radius: 1rem;
+        }
+
+        .title {
+            font-size: 3rem;
+            color: #111;
+            margin-bottom: 1rem
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem
+        }
+
+        .controls-body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4rem;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .label {
+            font-size: 1.5rem;
+            font-weight: 500
+        }
+
+        .button {
+            cursor: pointer;
+            background-color: #eee;
+            color: #000;
+            font-size: 2rem;
+            padding: 1rem;
+            background-color: #76a8ee;
+            width: fit-content;
+            z-index: 99999;
+            border-radius: 1rem;
+
+            margin: 4rem auto;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="controls">
+
+        <div class="title">
+            Initial Values:
+        </div>
+
+        <div class="subtitle">
+            Please Add some initial values to start the simulation:
+        </div>
+
+        <div class="controls-body">
+            <div style="display: flex; gap: 2rem">
+                <div>
+                    <div class="label">Engine Cycles</div>
+                    <input type="text" style="font-size: 2rem" />
+                </div>
+
+                <div>
+                    <div class="label">Containers Weight</div>
+                    <input type="text" style="font-size: 2rem" />
+                </div>
+            </div>
+            <div style="display: flex; gap: 2rem">
+                <div>
+                    <div class="label">Water Speed</div>
+                    <input type="text" style="font-size: 2rem" />
+                </div>
+
+                <div>
+                    <div class="label">Ship Rotation Angle</div>
+                    <input type="text" style="font-size: 2rem" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="text-center">
+
+            <div class="button">Start The Simulation!</div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

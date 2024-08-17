@@ -30,16 +30,24 @@ const getAcceleration = (force, weight) => {
 
 // Define the function to calculate thrust force
 const getEngineForce = (cycles) => {
-  const mu = 0.8; // Efficiency coefficient
-  const rho = 1025; // Density of seawater in kg/m^3
-  const S = 50; // Reference area in m^2
+  const mu = 0.5; // Efficiency coefficient
+  const rho = 1027; // Density of seawater in kg/m^3
+  const A = 23.635 ; // Reference area in m^2
   const k = 0.1; // Proportionality constant (example value)
+
+  const D = 10
+  const pitch = 0.2
+
+  const vw = 10.3 // water speed
 
   // always engine force angle 0 (always forward)
   const vecAngle = 0;
 
   // Calculate the thrust force using the derived formula
-  const vecForce = mu * k * cycles * Math.sqrt(2 * rho * S);
+  // Todo: check laws
+  // const vecForce = mu * k * cycles * Math.sqrt(2 * rho * A);
+  const vecForce = mu * D * D * cycles * pitch * pitch;
+  // const vecForce = rho * A * vw * vw
 
   // Return the thrust force
   return {
@@ -51,7 +59,7 @@ const getEngineForce = (cycles) => {
 // Define the function to calculate drag force
 const getResForce = (cycles) => {
   const rho = 1025; // Density of seawater in kg/m^3
-  const A = 50; // Reference Area Todo: should be calculated
+  const A = 23.635; // Reference Area Todo: should be calculated // const calculated by  h = v / l* w
   const Cd = 0.6; // Drag Coefficient
   const v = getEnginSpeed(cycles); // velocity of the object relative to the fluid
 
@@ -72,6 +80,7 @@ export const getEnginSpeed = (cycles) => {
   // get the engine force
   const engForce = getEngineForce(cycles);
 
+  console.log('Engine Force: ', engForce);
   // get the engine accelaration
   const engineAcc = getAcceleration(engForce.force, shipWeight);
 
@@ -87,6 +96,8 @@ export const getShipSpeed = (cycles) => {
 
   // get the drag force (resistance force)
   const resForce = getResForce(cycles);
+
+  console.log('Res Forc', resForce);
 
   // get the collective vector (engine and resistence)
   const collectiveVector = collectVectors(engForce, resForce);
