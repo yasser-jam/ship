@@ -1,18 +1,16 @@
 import * as THREE from 'three';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { getShipSpeed } from './../physics.js';
-
-
-//new saad
-import { weightForce } from './../physics.js';
-import { buoyantForce } from './../physics.js';
+import { buoyantForce, getRotationTime, getShipSpeed, weightForce } from './../physics.js';
 
 class MovingBox {
   constructor(scene) {
     this.scene = scene;
     this.loader = new OBJLoader();
     this.mtlLoader = new MTLLoader();
+
+    this.weight = 187500 ;
+    this.volume = 182.570593962999;
 
     // BOX
     // const geometry = new THREE.BoxGeometry(200, 200, 200);
@@ -21,7 +19,6 @@ class MovingBox {
     // this.ship.castShadow = true;
     // this.ship.receiveShadow = true;
     // this.scene.add(this.ship);
-
 
     // SHIP
     this.mtlLoader.load('src/textures/EverGiven/EverGiven.mtl', (materials) => {
@@ -59,57 +56,75 @@ class MovingBox {
 
     // Default number of engine cycles
     this.engineCycles = 1;
-
-    const moveConfig = getShipSpeed(this.engineCycles); // Set initial speed based on engine cycles
+    this.angle = 0;
+    this.radius = 1000; // نصف قطر الدوران
+    this.shipWeight = 0
+    
+    const moveConfig = getShipSpeed(this.engineCycles, this.angle); // Set initial speed based on engine cycles
     this.speed = moveConfig.speed;
-    this.angle = moveConfig.angle;
 
     // Movement keys
     this.moveLeft = false;
     this.moveRight = false;
 
-    this.weight = 187500 ;
-    this.volume = 182.570593962999 ;
-
-
     this.addEventListeners();
   }
-
 
   update(cycles = this.engineCycles) {
     // update engine cycles
     this.engineCycles = cycles;
 
-    var yPos =  buoyantForce(this.volume) - weightForce(this.weight) ;
-    console.log(yPos) ;
-    this.ship.position.y = yPos ;
+    if (this.ship) {
+      var yPos =  buoyantForce(this.volume) - weightForce(this.weight) ;
+      console.log(yPos) ;
+      this.ship.position.y = yPos ;
+
+    }
 
     // update box movement on z axis
-    const updateMove = getShipSpeed(this.engineCycles);
+    const updateMove = getShipSpeed(this.engineCycles, this.angle);
     this.speed = updateMove.speed;
     this.angle = updateMove.angle;
 
-    if (this.angle == 180) {
-      this.ship.translateX(this.speed / 0.1);
-      // this.ship.position.z += this.speed;
-    } else {
-      this.ship.translateX(-this.speed / 0.1);
+
+    if (this.ship) {
+      if (this.angle == 180) {
+        this.ship.translateX(this.speed / 0.1);
+        // this.ship.position.z += this.speed;
+      } else {
+        this.ship.translateX(-this.speed / 0.1);
+      }
+
+    }
+
+  }
+
+  sway() {
+    let level = 0.1
+  }
+
+  // Apply rotate on UI
+  rotate(dir) {
+    if (dir == 'right') {
+      this.angle += 1 / getRotationTime(this.radius) / 10;
+      this.ship.rotateY(this.angle);
+    } else if (dir == 'left') {
+      this.angle -= 1 / getRotationTime(this.radius) / 10;
+      this.ship.rotateY(this.angle);
     }
   }
 
   addEventListeners() {
     document.addEventListener('keydown', (event) => {
       if (event.code === 'KeyA') {
-        this.rotate(this.angle++)
+        this.rotate('right');
         this.moveLeft = true;
       }
       if (event.code === 'KeyD') {
-        this.rotate(this.angle--)
+        this.rotate('left');
         this.moveRight = true;
       }
     });
-
-    //new saad
 
     document.addEventListener('keyup', (event) => {
       if (event.code === 'KeyA') {
@@ -119,13 +134,6 @@ class MovingBox {
         this.moveRight = false;
       }
     });
-  }
-
-
-  rotate(angle) {
-    setTimeout(() => {
-      this.ship.rotateY(angle)
-      }, 10)
   }
 }
 

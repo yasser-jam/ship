@@ -8,54 +8,150 @@
 
 
     <style>
-        *,
-        *::before,
-        *::after {
+        * {
             margin: 0;
-            padding: 0
+            padding: 0;
         }
 
         html {
-            overflow: hidden
-        }
-
-        body {
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 16px;
         }
 
-        .card {
+        .controls-container {
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-image: url('/src/images/base.png');
+        }
+
+        .controls {
+            position: fixed;
+            top: 3%;
+            left: 4%;
+            width: 90%;
+            height: 90%;
+            background-color: rgba(255, 255, 255, .8);
+            padding: 1rem;
+            border-radius: 1rem;
+        }
+
+        .title-c {
+            font-size: 3rem;
+            color: #111;
+            margin-bottom: 1rem
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem
+        }
+
+        .controls-body {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            margin: 4rem;
+            flex-direction: column;
             gap: 2rem;
+        }
+
+        .label {
+            font-size: 1.5rem;
+            font-weight: 500
+        }
+
+        .button {
+            cursor: pointer;
+            background-color: #eee;
+            color: #000;
+            /* font-size: 2rem; */
+            padding: 1rem;
+            background-color: #76a8ee;
+            width: fit-content;
+            z-index: 99999;
+            border-radius: 1rem;
+
+            margin: 4rem auto;
+        }
+        .card {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4rem;
 
             position: fixed;
-            top: 1rem;
+            bottom: 1rem;
             left: 1rem;
             z-index: 999999;
 
             background: rgba(255, 255, 255, .75);
-            padding: 2rem;
+            padding: 1rem 2rem;
             font-size: 1.5rem;
-        }
-
-        .text-lg {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .text-sm {
-            font-size: 1rem;
         }
     </style>
 
 </head>
 
 <body>
-    <div id="container"></div>
-    <div id="info">
-        <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - webgl ocean
+    <div id="sim" style="display: none">
+        <div id="container"></div>
+        <div id="info">
+            <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - webgl ocean
+        </div>
     </div>
+    
+    <div id="cont" class="controls-container">
+
+        <div class="controls">
+    
+            <div class="title-c">
+                Initial Values:
+            </div>
+    
+            <div class="subtitle">
+                Please Add some initial values to start the simulation:
+            </div>
+    
+            <div class="controls-body">
+                <!-- <div style="display: flex; gap: 2rem">
+                    <div>
+                        <div class="label">Engine Cycles</div>
+                        <input id="cycles" type="text" style="font-size: 2rem" />
+                    </div>
+    
+                    <div>
+                        <div class="label">Containers Weight</div>
+                        <input id="weight" type="text" style="font-size: 2rem" />
+                    </div>
+                </div>
+                <div style="display: flex; gap: 2rem">
+                    <div>
+                        <div class="label">Water Speed</div>
+                        <input type="text" style="font-size: 2rem" />
+                    </div>
+    
+                    <div>
+                        <div class="label">Ship Rotation Angle</div>
+                        <input id="angle" type="text" style="font-size: 2rem" />
+                    </div>
+                </div> -->
+    
+            </div>
+    
+            <div class="text-center">
+    
+                <div id="btn" class="button">Start The Simulation!</div>
+    
+            </div>
+    
+        </div>
+    </div>
+    
+
+    
     <script type="importmap">
         {
             "imports": {
@@ -66,7 +162,27 @@
     </script>
     <script type="module" src="src/js/main.js"></script>
 
-    
+    <script type="module">
+        import { updateCycles, updateWeight, init, addGui } from './src/js/main.js'
+        document.querySelector('#btn').addEventListener('click', () => {
+            // get values
+            // const cycles = Number(document.querySelector('#cycles').value)
+            // const weight = Number(document.querySelector('#weight').value)
+            // const angle = Number(document.querySelector('#angle').value)
+
+            init()
+
+
+            // updateCycles(cycles)
+            // updateCycles(weight)
+            
+            // add gui
+            addGui()
+
+            document.querySelector('#sim').style.display = 'block'
+            document.querySelector('#cont').style.display = 'none'
+        })
+    </script>
 </body>
 
 </html>
