@@ -158,7 +158,7 @@ export function animate() {
   // reduce frames
   setTimeout(() => {
     requestAnimationFrame(animate);
-  }, 1000);
+  }, 1);
 
   movingBox.update(movingBox.engineCycles); // Update box movement
   customSea.update(); // Update sea animations
@@ -179,9 +179,13 @@ export function animate() {
     camera.lookAt(shipPosition);
   }
 
-  const shipCollisionDetectionBox = new THREE.Box3().setFromObject(
-    movingBox.ship
-  );
+let shipCollisionDetectionBox
+  if (movingBox.ship) {
+    shipCollisionDetectionBox = new THREE.Box3().setFromObject(
+      movingBox.ship
+    );
+
+  }
 
   let rockCollisionDetectionBox;
 
@@ -192,16 +196,18 @@ export function animate() {
     );
 
     // var distance = distanceVector(movingBox.ship.position , rock.rock.position) ;
-    if (shipCollisionDetectionBox.intersectsBox(rockCollisionDetectionBox)) {
-      //speed needs to be 0 buy the function
-      //speed after collision // just add more weight to the rock untell it became 0
-      console.log('collision');
-      movingBox.weight += 1.6;
-      console.log(movingBox.weight);
-
-      // Shut down
-      setCollesion();
-      setSpeed(0);
+    if (shipCollisionDetectionBox && rockCollisionDetectionBox) {
+      if (shipCollisionDetectionBox.intersectsBox(rockCollisionDetectionBox)) {
+        //speed needs to be 0 buy the function
+        //speed after collision // just add more weight to the rock untell it became 0
+        console.log('collision');
+        movingBox.weight += 2;
+        console.log(movingBox.weight);
+  
+        // Shut down
+        setCollesion();
+        setSpeed(0);
+      }
     }
   }
 

@@ -11,7 +11,7 @@ class CustomSea {
         this.water = new Water(waterGeometry, {
             textureWidth: 512,
             textureHeight: 512,
-            waterNormals: new THREE.TextureLoader().load('https://threejs.org/examples/textures/waternormals.jpg', function (texture) {
+            waterNormals: new THREE.TextureLoader().load('../../textures/sea.jpg', function (texture) {
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
             }),
             sunDirection: sunDirection,
