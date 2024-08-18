@@ -124,6 +124,10 @@ class MovingBox {
         this.rotate('left');
         this.moveRight = true;
       }
+      if (event.code === 'KeyH') {
+        console.log('Horn sound');
+        this.hornSound.play();
+      }
     });
 
     document.addEventListener('keyup', (event) => {
