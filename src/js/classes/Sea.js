@@ -6,12 +6,12 @@ class CustomSea {
         this.scene = scene;
 
         // تكبير رقعة البحر
-        const waterGeometry = new THREE.PlaneGeometry(10000000, 10000000);
+        const waterGeometry = new THREE.PlaneGeometry(100000, 100000);
 
         this.water = new Water(waterGeometry, {
             textureWidth: 512,
             textureHeight: 512,
-            waterNormals: new THREE.TextureLoader().load('../../textures/sea.jpg', function (texture) {
+            waterNormals: new THREE.TextureLoader().load('ttps://threejs.org/examples/textures/waternormals.jpg', function (texture) {
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
             }),
             sunDirection: sunDirection,
