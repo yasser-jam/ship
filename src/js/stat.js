@@ -22,7 +22,7 @@ export const setAccc = (a) => {
 };
 
 const div = document.createElement('div');
-document.body.append(div);
+document.querySelector('#sim').append(div);
 
 div.id = 'card';
 

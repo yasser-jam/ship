@@ -9,6 +9,8 @@ class MovingBox {
     this.loader = new OBJLoader();
     this.mtlLoader = new MTLLoader();
 
+    this.weight = 187500 ;
+    this.volume = 182.570593962999;
 
     // BOX
     const geometry = new THREE.BoxGeometry(200, 200, 200);
@@ -56,12 +58,8 @@ class MovingBox {
     this.engineCycles = 1;
     this.angle = 0;
     this.radius = 1000; // نصف قطر الدوران
+    this.shipWeight = 0
     
-    // Sway
-    this.swayLevel = 0;
-    this.swayLeft = true
-    this.swayRight = false
-
     const moveConfig = getShipSpeed(this.engineCycles, this.angle); // Set initial speed based on engine cycles
     this.speed = moveConfig.speed;
 
