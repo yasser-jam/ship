@@ -116,7 +116,7 @@
             </div>
     
             <div class="controls-body">
-                <div style="display: flex; gap: 2rem">
+                <!-- <div style="display: flex; gap: 2rem">
                     <div>
                         <div class="label">Engine Cycles</div>
                         <input id="cycles" type="text" style="font-size: 2rem" />
@@ -137,7 +137,7 @@
                         <div class="label">Ship Rotation Angle</div>
                         <input id="angle" type="text" style="font-size: 2rem" />
                     </div>
-                </div>
+                </div> -->
     
             </div>
     
@@ -166,15 +166,15 @@
         import { updateCycles, updateWeight, init, addGui } from './src/js/main.js'
         document.querySelector('#btn').addEventListener('click', () => {
             // get values
-            const cycles = Number(document.querySelector('#cycles').value)
-            const weight = Number(document.querySelector('#weight').value)
-            const angle = Number(document.querySelector('#angle').value)
+            // const cycles = Number(document.querySelector('#cycles').value)
+            // const weight = Number(document.querySelector('#weight').value)
+            // const angle = Number(document.querySelector('#angle').value)
 
             init()
 
 
-            updateCycles(cycles)
-            updateCycles(weight)
+            // updateCycles(cycles)
+            // updateCycles(weight)
             
             // add gui
             addGui()

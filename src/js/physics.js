@@ -7,6 +7,9 @@ let startSceneTime = Date.now();
 // const shipWeight = 10000
 const shipWeight = 187000000
 
+let isCollesion;
+export const setCollesion = () => isCollesion = true
+
 // BASIC CALCULATIONS
 
 // Calculate Velocity
@@ -128,10 +131,6 @@ export const getEnginSpeed = (cycles) => {
   return engSpeed
 };
 
-export const shutDown = (speed) => {
-  
-}
-
 // initial speed
 let initialSpeed = 0
 
@@ -157,7 +156,9 @@ export const getShipSpeed = (cycles, angle) => {
   setAccc(acc)
   // get the final speed (velocity)
   initialSpeed = getVelocity(acc, initialSpeed)
-  const speed = getVelocity(acc, initialSpeed);
+  let speed = getVelocity(acc, initialSpeed);
+
+  if (isCollesion) speed = 0
 
   // upate stat
   setSpeed(speed)
@@ -199,3 +200,7 @@ export const getSpeedAfterCollision = (shipSpeed , shipWeight , rockWeight) => {
   //"v' = vm / (m + M)"
   return (shipSpeed * shipWeight) / (rockWeight + shipWeight);
 };
+
+export const shutDown = () => {
+
+}

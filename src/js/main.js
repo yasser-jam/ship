@@ -8,6 +8,8 @@ import MovingBox from './classes/Box.js';
 import Rock from './classes/Rock.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+import { setSpeed } from './stat.js';
+import { setCollesion } from './physics.js';
 
 let container, stats, controls;
 let camera, scene, renderer;
@@ -180,9 +182,9 @@ export function animate() {
   const shipCollisionDetectionBox = new THREE.Box3().setFromObject(
     movingBox.ship
   );
-  
-  let rockCollisionDetectionBox
-  
+
+  let rockCollisionDetectionBox;
+
   if (rock.rock) {
     rockCollisionDetectionBox = new THREE.Box3().setFromCenterAndSize(
       rock.rock.position,
@@ -196,11 +198,12 @@ export function animate() {
       console.log('collision');
       movingBox.weight += 1.6;
       console.log(movingBox.weight);
+
+      // Shut down
+      setCollesion();
+      setSpeed(0);
     }
   }
-
-
-
 
   controls.update();
   renderer.render(scene, camera);
